@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Links para Servlets</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body>
+    <h1>Links para Servlets</h1>
+    <ul>
+        <li><a href="#" onclick="carregarEuJSON()">Eu.json</a></li>
+        <li><a href="#" onclick="carregarLoteriaJSON()">Loteria.json</a></li>
+    </ul>
+    
+    <h2>Resultado:</h2>
+    <div id="resultadoJSON"></div>
+
+    <script>
+        function carregarEuJSON() {
+            var xhr = new XMLHttpRequest();
+            xhr.open("GET", "ApiEuServlet", true);
+            xhr.onreadystatechange = function () {
+                if (xhr.readyState == 4 && xhr.status == 200) {
+                    var resultado = JSON.parse(xhr.responseText);
+                    var informacoes = "RA: " + resultado.RA + "<br>" +
+                                      "Nome: " + resultado.Nome + "<br>" +
+                                      "Disciplinas: <ul>";
+                    resultado.Disciplinas.forEach(function (disciplina) {
+                        informacoes += "<li>" + disciplina + "</li>";
+                    });
+                    informacoes += "</ul>";
+                    exibirResultado(informacoes);
+                }
+            };
+            xhr.send();
+        }
+
+        function carregarLoteriaJSON() {
+            var xhr = new XMLHttpRequest();
+            xhr.open("GET", "ApiLoteriaServlet", true);
+            xhr.onreadystatechange = function () {
+                if (xhr.readyState == 4 && xhr.status == 200) {
+                    var resultado = JSON.parse(xhr.responseText);
+                    var informacoes = "Data/Hora: " + resultado.DataHora + "<br>" +
+                                      "Números da Loteria: <ul>";
+                    resultado.NumerosLoteria.forEach(function (numero) {
+                        informacoes += "<li>" + numero + "</li>";
+                    });
+                    informacoes += "</ul>";
+                    exibirResultado(informacoes);
+                }
+            };
+            xhr.send();
+        }
+
+        function exibirResultado(informacoes) {
+            document.getElementById("resultadoJSON").innerHTML = informacoes;
+        }
+    </script>
+</body>
+</html>
